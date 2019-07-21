@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mms.dao.GoodMapper">
+  <resultMap id="BaseResultMap" type="com.demo.mms.common.domain.Good">
+    <id column="goodID" jdbcType="INTEGER" property="goodid" />
+    <result column="goodName" jdbcType="VARCHAR" property="goodname" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="kindID" jdbcType="VARCHAR" property="kindid" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.demo.mms.common.domain.Good">
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    goodID, goodName, price, kindID, picture
+  </sql>
+  <sql id="Blob_Column_List">
+    description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from good
+    where goodID = #{goodid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from good
+    where goodID = #{goodid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.demo.mms.common.domain.Good">
+    insert into good (goodID, goodName, price, 
+      kindID, picture, description
+      )
+    values (#{goodid,jdbcType=INTEGER}, #{goodname,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{kindid,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.mms.common.domain.Good">
+    insert into good
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodid != null">
+        goodID,
+      </if>
+      <if test="goodname != null">
+        goodName,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="kindid != null">
+        kindID,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodid != null">
+        #{goodid,jdbcType=INTEGER},
+      </if>
+      <if test="goodname != null">
+        #{goodname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="kindid != null">
+        #{kindid,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.mms.common.domain.Good">
+    update good
+    <set>
+      <if test="goodname != null">
+        goodName = #{goodname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="kindid != null">
+        kindID = #{kindid,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where goodID = #{goodid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.demo.mms.common.domain.Good">
+    update good
+    set goodName = #{goodname,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      kindID = #{kindid,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where goodID = #{goodid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.mms.common.domain.Good">
+    update good
+    set goodName = #{goodname,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      kindID = #{kindid,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR}
+    where goodID = #{goodid,jdbcType=INTEGER}
+  </update>
+  <select id="getNumOfGoodsByKind" parameterType="java.lang.String" resultType="Integer">
+    select count(*)
+    from good
+    where kindID = #{value,jdbcType=VARCHAR}
+  </select>
+  <select id="getTheNthGoodFromDB" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from good
+    limit #{value},1
+  </select>
+</mapper>
