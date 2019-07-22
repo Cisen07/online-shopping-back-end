@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mms.dao.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.demo.mms.common.domain.Orders">
+    <id column="orderID" jdbcType="INTEGER" property="orderid" />
+    <result column="goodID" jdbcType="INTEGER" property="goodid" />
+    <result column="goodNumber" jdbcType="INTEGER" property="goodnumber" />
+    <result column="totalPrice" jdbcType="DECIMAL" property="totalprice" />
+    <result column="userID" jdbcType="INTEGER" property="userid" />
+    <result column="ordertime" jdbcType="TIMESTAMP" property="ordertime" />
+    <result column="sendtime" jdbcType="TIMESTAMP" property="sendtime" />
+    <result column="receivetime" jdbcType="TIMESTAMP" property="receivetime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="phonenum" jdbcType="VARCHAR" property="phonenum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    orderID, goodID, goodNumber, totalPrice, userID, ordertime, sendtime, receivetime, 
+    state, name, address, phonenum
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where orderID = #{orderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orders
+    where orderID = #{orderid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.demo.mms.common.domain.Orders">
+    insert into orders (orderID, goodID, goodNumber, 
+      totalPrice, userID, ordertime, 
+      sendtime, receivetime, state, 
+      name, address, phonenum
+      )
+    values (#{orderid,jdbcType=INTEGER}, #{goodid,jdbcType=INTEGER}, #{goodnumber,jdbcType=INTEGER}, 
+      #{totalprice,jdbcType=DECIMAL}, #{userid,jdbcType=INTEGER}, #{ordertime,jdbcType=TIMESTAMP}, 
+      #{sendtime,jdbcType=TIMESTAMP}, #{receivetime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.mms.common.domain.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        orderID,
+      </if>
+      <if test="goodid != null">
+        goodID,
+      </if>
+      <if test="goodnumber != null">
+        goodNumber,
+      </if>
+      <if test="totalprice != null">
+        totalPrice,
+      </if>
+      <if test="userid != null">
+        userID,
+      </if>
+      <if test="ordertime != null">
+        ordertime,
+      </if>
+      <if test="sendtime != null">
+        sendtime,
+      </if>
+      <if test="receivetime != null">
+        receivetime,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="phonenum != null">
+        phonenum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="goodid != null">
+        #{goodid,jdbcType=INTEGER},
+      </if>
+      <if test="goodnumber != null">
+        #{goodnumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalprice != null">
+        #{totalprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="ordertime != null">
+        #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendtime != null">
+        #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receivetime != null">
+        #{receivetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null">
+        #{phonenum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.mms.common.domain.Orders">
+    update orders
+    <set>
+      <if test="goodid != null">
+        goodID = #{goodid,jdbcType=INTEGER},
+      </if>
+      <if test="goodnumber != null">
+        goodNumber = #{goodnumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalprice != null">
+        totalPrice = #{totalprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userid != null">
+        userID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="ordertime != null">
+        ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendtime != null">
+        sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receivetime != null">
+        receivetime = #{receivetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phonenum != null">
+        phonenum = #{phonenum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where orderID = #{orderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.mms.common.domain.Orders">
+    update orders
+    set goodID = #{goodid,jdbcType=INTEGER},
+      goodNumber = #{goodnumber,jdbcType=INTEGER},
+      totalPrice = #{totalprice,jdbcType=DECIMAL},
+      userID = #{userid,jdbcType=INTEGER},
+      ordertime = #{ordertime,jdbcType=TIMESTAMP},
+      sendtime = #{sendtime,jdbcType=TIMESTAMP},
+      receivetime = #{receivetime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      phonenum = #{phonenum,jdbcType=VARCHAR}
+    where orderID = #{orderid,jdbcType=INTEGER}
+  </update>
+</mapper>

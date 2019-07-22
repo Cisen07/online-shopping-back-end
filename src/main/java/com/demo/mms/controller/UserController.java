@@ -1,9 +1,11 @@
 package com.demo.mms.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.mms.common.domain.Good;
+import com.demo.mms.common.domain.Orders;
 import com.demo.mms.common.domain.Shoppingcart;
 import com.demo.mms.common.domain.User;
 import com.demo.mms.common.utils.IDGenerator;
@@ -234,7 +236,26 @@ public class UserController {
         }
     }
 
-
+    @RequestMapping("/addOrder")
+    @ResponseBody
+    public Object generateOrder(@RequestBody JSONObject jsonObject){
+        JSONObject jsonObjectR = new JSONObject();
+        String userID = jsonObject.getString("userID");
+        String tel = jsonObject.getString("tel");
+        String userName = jsonObject.getString("userName");
+        String streetName = jsonObject.getString("streetName");
+        JSONArray goodsList = jsonObject.getJSONArray("goodsList");
+        String orderTotal = jsonObject.getString("orderTotal");
+        User tempUser = userService.getUserByID(userID);
+        if (tempUser == null){
+            jsonObjectR.put("success", false);
+            jsonObjectR.put("message", "用户id不存在");
+        } else{
+            Orders orders = new Orders();
+//            orders.set;
+        }
+        return jsonObjectR;
+    }
 }
 //获取参数可以使用bean，也就是使用Admin admin，再利用方法
 //        //也可以直接获取，这里就是，注意要用包装类，不用基本类型，比如要用Integer而不是int，这样在输入空值时不会报错
