@@ -20,5 +20,9 @@ public interface GoodMapper {
 
     int getNumOfGoodsByKind(@Param("value")String cid);
 
-    Good getTheNthGoodFromDB(@Param("value")Integer i);
+    int getNumOfGoods();
+
+    Good getTheNthGoodByKindFromDB(@Param("cid")String cid, @Param("value")Integer i);
+
+    Good getTheNthGoodFromDB(int i);
 }

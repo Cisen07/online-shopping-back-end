@@ -51,28 +51,50 @@ public class GoodsController {
     public Object getAllGoods(@RequestBody JSONObject jsonObject){
         JSONObject jsonObjectR = new JSONObject();
         ArrayList<JSONObject> resultArrayList = new ArrayList<>();
-        boolean success = false;
-        String msg;
         String cid = jsonObject.getString("cid");
-        int numOfGoodsByKinds = goodsService.getNumOfGood(cid);
-        if (numOfGoodsByKinds == 0) {
-            msg = "该类别下没有产品";
-        } else {
-            for (int i = 0; i < numOfGoodsByKinds; i++) {
-                Good tempGood = goodsService.getTheNthGood(i);
-                JSONObject tempJObject = new JSONObject();
-                tempJObject.put("productId", tempGood.getGoodid());
-                tempJObject.put("productName", tempGood.getGoodname());
-                tempJObject.put("subTitle", tempGood.getDescription());
-                tempJObject.put("salePrice", tempGood.getPrice());
-                tempJObject.put("picUrl", tempGood.getPicture());
-                resultArrayList.add(tempJObject);
+        if (cid.equals("-1")){   //此时返回所有商品
+            int numOfGoods = goodsService.getNumOfGood();
+            if (numOfGoods == 0) {
+                jsonObjectR.put("success", false);
+                jsonObjectR.put("message", "数据库中没有产品");
+            } else {
+                for (int i = 0; i < numOfGoods; i++) {
+                    Good tempGood = goodsService.getTheNthGood(i);
+                    JSONObject tempJObject = new JSONObject();
+                    tempJObject.put("productId", tempGood.getGoodid());
+                    tempJObject.put("productName", tempGood.getGoodname());
+                    tempJObject.put("subTitle", tempGood.getDescription());
+                    tempJObject.put("salePrice", tempGood.getPrice());
+                    tempJObject.put("picUrl", tempGood.getPicture());
+                    resultArrayList.add(tempJObject);
+                }
+                jsonObjectR.put("result", resultArrayList);
+                jsonObjectR.put("message", "成功获得全部产品信息");
+                jsonObjectR.put("success", true);
             }
-            msg = "成功获得产品信息";
-            success = true;
+            return jsonObjectR;
+        }else{  //这里需要针对某个类给出产品信息
+            int numOfGoodsByKinds = goodsService.getNumOfGood(cid);
+            if (numOfGoodsByKinds == 0) {
+                jsonObjectR.put("success", false);
+                jsonObjectR.put("result", "该类别下没有产品");
+            } else {
+                for (int i = 0; i < numOfGoodsByKinds; i++) {
+                    Good tempGood = goodsService.getTheNthGoodByKind(cid, i);
+                    JSONObject tempJObject = new JSONObject();
+                    tempJObject.put("productId", tempGood.getGoodid());
+                    tempJObject.put("productName", tempGood.getGoodname());
+                    tempJObject.put("subTitle", tempGood.getDescription());
+                    tempJObject.put("salePrice", tempGood.getPrice());
+                    tempJObject.put("picUrl", tempGood.getPicture());
+                    resultArrayList.add(tempJObject);
+                }
+                jsonObjectR.put("result", resultArrayList);
+                jsonObjectR.put("message", "成功获得产品信息");
+                jsonObjectR.put("success", true);
+            }
+            return jsonObjectR;
         }
-        jsonObjectR.put("result", resultArrayList);
-        return jsonObjectR;
     }
 
     @RequestMapping("/productDet")
@@ -88,6 +110,7 @@ public class GoodsController {
         } else {
             JSONObject jsonObject1 = new JSONObject();
             jsonObject1.put("productId", wantProductID);
+            jsonObject1.put("goodName", wantGood.getGoodname());
             jsonObject1.put("productImg", wantGood.getPicture());
             jsonObject1.put("salePrice", wantGood.getPrice());
             jsonObject1.put("subTitle", wantGood.getDescription());

@@ -16,8 +16,20 @@ public class GoodsServiceImpl implements GoodsService{
     }
 
     @Override
+    public int getNumOfGood() {
+        return goodMapper.getNumOfGoods();
+    }
+
+    @Override
     public Good getTheNthGood(int i) {
         return goodMapper.getTheNthGoodFromDB(i);
+    }
+
+    @Override
+    public Good getTheNthGoodByKind(String cid, int i) {
+        System.out.println("the cid is:" + cid);
+        System.out.println("the i is:" + i);
+        return goodMapper.getTheNthGoodByKindFromDB(cid, i);
     }
 
     @Override
