@@ -1,27 +1,20 @@
 package com.demo.mms.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.mms.common.domain.Good;
-import com.demo.mms.common.domain.Orders;
 import com.demo.mms.common.domain.Shoppingcart;
 import com.demo.mms.common.domain.User;
 import com.demo.mms.common.utils.IDGenerator;
 import com.demo.mms.service.GoodsService;
 import com.demo.mms.service.ShoppingcartService;
 import com.demo.mms.service.UserService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import javax.servlet.http.HttpSession;
+
 import java.util.ArrayList;
 
 @Controller
@@ -251,7 +244,7 @@ public class UserController {
             jsonObjectR.put("success", false);
             jsonObjectR.put("message", "用户id不存在");
         } else{
-            Orders orders = new Orders();
+//            Orders orders = new Orders();
 //            orders.set;
         }
         return jsonObjectR;

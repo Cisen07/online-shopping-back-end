@@ -3,8 +3,6 @@
 <mapper namespace="com.demo.mms.dao.OrdersMapper">
   <resultMap id="BaseResultMap" type="com.demo.mms.common.domain.Orders">
     <id column="orderID" jdbcType="INTEGER" property="orderid" />
-    <result column="goodID" jdbcType="INTEGER" property="goodid" />
-    <result column="goodNumber" jdbcType="INTEGER" property="goodnumber" />
     <result column="totalPrice" jdbcType="DECIMAL" property="totalprice" />
     <result column="userID" jdbcType="INTEGER" property="userid" />
     <result column="ordertime" jdbcType="TIMESTAMP" property="ordertime" />
@@ -16,8 +14,8 @@
     <result column="phonenum" jdbcType="VARCHAR" property="phonenum" />
   </resultMap>
   <sql id="Base_Column_List">
-    orderID, goodID, goodNumber, totalPrice, userID, ordertime, sendtime, receivetime, 
-    state, name, address, phonenum
+    orderID, totalPrice, userID, ordertime, sendtime, receivetime, state, name, address, 
+    phonenum
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -30,28 +28,20 @@
     where orderID = #{orderid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.demo.mms.common.domain.Orders">
-    insert into orders (orderID, goodID, goodNumber, 
-      totalPrice, userID, ordertime, 
-      sendtime, receivetime, state, 
-      name, address, phonenum
-      )
-    values (#{orderid,jdbcType=INTEGER}, #{goodid,jdbcType=INTEGER}, #{goodnumber,jdbcType=INTEGER}, 
-      #{totalprice,jdbcType=DECIMAL}, #{userid,jdbcType=INTEGER}, #{ordertime,jdbcType=TIMESTAMP}, 
-      #{sendtime,jdbcType=TIMESTAMP}, #{receivetime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{phonenum,jdbcType=VARCHAR}
-      )
+    insert into orders (orderID, totalPrice, userID, 
+      ordertime, sendtime, receivetime, 
+      state, name, address, 
+      phonenum)
+    values (#{orderid,jdbcType=INTEGER}, #{totalprice,jdbcType=DECIMAL}, #{userid,jdbcType=INTEGER}, 
+      #{ordertime,jdbcType=TIMESTAMP}, #{sendtime,jdbcType=TIMESTAMP}, #{receivetime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{phonenum,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.demo.mms.common.domain.Orders">
     insert into orders
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="orderid != null">
         orderID,
-      </if>
-      <if test="goodid != null">
-        goodID,
-      </if>
-      <if test="goodnumber != null">
-        goodNumber,
       </if>
       <if test="totalprice != null">
         totalPrice,
@@ -85,12 +75,6 @@
       <if test="orderid != null">
         #{orderid,jdbcType=INTEGER},
       </if>
-      <if test="goodid != null">
-        #{goodid,jdbcType=INTEGER},
-      </if>
-      <if test="goodnumber != null">
-        #{goodnumber,jdbcType=INTEGER},
-      </if>
       <if test="totalprice != null">
         #{totalprice,jdbcType=DECIMAL},
       </if>
@@ -123,12 +107,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.demo.mms.common.domain.Orders">
     update orders
     <set>
-      <if test="goodid != null">
-        goodID = #{goodid,jdbcType=INTEGER},
-      </if>
-      <if test="goodnumber != null">
-        goodNumber = #{goodnumber,jdbcType=INTEGER},
-      </if>
       <if test="totalprice != null">
         totalPrice = #{totalprice,jdbcType=DECIMAL},
       </if>
@@ -161,9 +139,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.demo.mms.common.domain.Orders">
     update orders
-    set goodID = #{goodid,jdbcType=INTEGER},
-      goodNumber = #{goodnumber,jdbcType=INTEGER},
-      totalPrice = #{totalprice,jdbcType=DECIMAL},
+    set totalPrice = #{totalprice,jdbcType=DECIMAL},
       userID = #{userid,jdbcType=INTEGER},
       ordertime = #{ordertime,jdbcType=TIMESTAMP},
       sendtime = #{sendtime,jdbcType=TIMESTAMP},
@@ -174,4 +150,16 @@
       phonenum = #{phonenum,jdbcType=VARCHAR}
     where orderID = #{orderid,jdbcType=INTEGER}
   </update>
+  <select id="getNumOfOrdersByUserId" parameterType="java.lang.Integer" resultType="Integer">
+    select count(*)
+    from orders
+    where userID = #{id, jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from orders
+    where userID = #{id, jdbcType=INTEGER}
+    limit #{value, jdbcType=INTEGER}, 1
+  </select>
 </mapper>

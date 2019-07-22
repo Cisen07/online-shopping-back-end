@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mms.dao.GoodListMapper">
+  <resultMap id="BaseResultMap" type="com.demo.mms.common.domain.GoodList">
+    <result column="orderID" jdbcType="INTEGER" property="orderid" />
+    <result column="goodID" jdbcType="INTEGER" property="goodid" />
+    <result column="goodnum" jdbcType="INTEGER" property="goodnum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    orderID, goodID, goodnum
+  </sql>
+  <insert id="insert" parameterType="com.demo.mms.common.domain.GoodList">
+    insert into goodlist (orderID, goodID, goodnum
+      )
+    values (#{orderid,jdbcType=INTEGER}, #{goodid,jdbcType=INTEGER}, #{goodnum,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.mms.common.domain.GoodList">
+    insert into goodlist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        orderID,
+      </if>
+      <if test="goodid != null">
+        goodID,
+      </if>
+      <if test="goodnum != null">
+        goodnum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        #{orderid,jdbcType=INTEGER},
+      </if>
+      <if test="goodid != null">
+        #{goodid,jdbcType=INTEGER},
+      </if>
+      <if test="goodnum != null">
+        #{goodnum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="getNumByOrderId" parameterType="java.lang.Integer" resultType="Integer">
+    select count(*)
+    from  goodlist
+    where orderID = #{value,jdbcType=INTEGER}
+  </select>
+  <select id="getTheNthItem" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from goodlist
+    where orderID = #{id, jdbcType=INTEGER}
+    limit #{value}, 1
+  </select>
+  <delete id="deleteByOrderId" parameterType="java.lang.Integer">
+    delete from goodlist
+    where orderID = #{value, jdbcType=INTEGER}
+  </delete>
+</mapper>

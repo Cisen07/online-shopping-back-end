@@ -23,10 +23,9 @@ public class AddressController {
     public Object getaddressList(@RequestBody JSONObject jsonObject) {
         String id = jsonObject.getString("userId");
         JSONObject jsonObjectR = new JSONObject();
-        ArrayList<JSONObject> resultArrayList = new ArrayList<>();
+        ArrayList<JSONObject> resultArrayList = new ArrayList<>(20);
         int numberOfAddress = addressService.getNumberOfAddress(id);
         AddressKey tempAddress;
-        JSONObject tempJObject = new JSONObject();
         if (numberOfAddress == 0) {
             try {
                 jsonObjectR.put("success", false);
@@ -36,6 +35,7 @@ public class AddressController {
             }
         } else {
             for (int i = 0; i < numberOfAddress; i++) {
+                JSONObject tempJObject = new JSONObject();
                 tempAddress = addressService.getAddressItem(i, id);
                 tempJObject.put("name", tempAddress.getName());
                 tempJObject.put("address", tempAddress.getAddress());

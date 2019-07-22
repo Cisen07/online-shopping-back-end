@@ -6,10 +6,6 @@ import java.util.Date;
 public class Orders {
     private Integer orderid;
 
-    private Integer goodid;
-
-    private Integer goodnumber;
-
     private BigDecimal totalprice;
 
     private Integer userid;
@@ -34,22 +30,6 @@ public class Orders {
 
     public void setOrderid(Integer orderid) {
         this.orderid = orderid;
-    }
-
-    public Integer getGoodid() {
-        return goodid;
-    }
-
-    public void setGoodid(Integer goodid) {
-        this.goodid = goodid;
-    }
-
-    public Integer getGoodnumber() {
-        return goodnumber;
-    }
-
-    public void setGoodnumber(Integer goodnumber) {
-        this.goodnumber = goodnumber;
     }
 
     public BigDecimal getTotalprice() {

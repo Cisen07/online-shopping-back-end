@@ -16,14 +16,14 @@ public class IDGenerator {
     }
 
     public static  int getIdInt9(){
-        return (int)((Math.random()*9+1)*100000000);   //生成7位随机数
+        return (int)((Math.random()*9+1)*100000000);   //生成9位随机数
     }
 
     public static void main(String[] args) {
         for (int i = 0; i < 100; i++) {
 
-            System.out.println(IDGenerator.getId());
-//            System.out.println(IDGenerator.getIdInt9());
+//            System.out.println(IDGenerator.getId());
+            System.out.println(IDGenerator.getIdInt9());
         }
     }
 }
