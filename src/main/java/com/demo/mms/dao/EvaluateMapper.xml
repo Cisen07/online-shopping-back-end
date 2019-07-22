@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mms.dao.EvaluateMapper">
+  <resultMap id="BaseResultMap" type="com.demo.mms.common.domain.Evaluate">
+    <id column="userID" jdbcType="INTEGER" property="userid" />
+    <id column="goodID" jdbcType="INTEGER" property="goodid" />
+    <id column="evaluation" jdbcType="VARCHAR" property="evaluation" />
+    <result column="stars" jdbcType="INTEGER" property="stars" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.demo.mms.common.domain.Evaluate">
+    <result column="evaluation" jdbcType="LONGVARCHAR" property="evaluation" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    userID, goodID, stars, evaluation
+  </sql>
+  <sql id="Blob_Column_List">
+    evaluation
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.demo.mms.common.domain.EvaluateKey" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from evaluate
+    where userID = #{userid,jdbcType=INTEGER}
+      and goodID = #{goodid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.demo.mms.common.domain.EvaluateKey">
+    delete from evaluate
+    where userID = #{userid,jdbcType=INTEGER}
+      and goodID = #{goodid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.demo.mms.common.domain.Evaluate">
+    insert into evaluate (userID, goodID, stars, 
+      evaluation)
+    values (#{userid,jdbcType=INTEGER}, #{goodid,jdbcType=INTEGER}, #{stars,jdbcType=INTEGER}, 
+      #{evaluation,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.demo.mms.common.domain.Evaluate">
+    insert into evaluate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        userID,
+      </if>
+      <if test="goodid != null">
+        goodID,
+      </if>
+      <if test="stars != null">
+        stars,
+      </if>
+      <if test="evaluation != null">
+        evaluation,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="goodid != null">
+        #{goodid,jdbcType=INTEGER},
+      </if>
+      <if test="stars != null">
+        #{stars,jdbcType=INTEGER},
+      </if>
+      <if test="evaluation != null">
+        #{evaluation,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.demo.mms.common.domain.Evaluate">
+    update evaluate
+    <set>
+      <if test="stars != null">
+        stars = #{stars,jdbcType=INTEGER},
+      </if>
+      <if test="evaluation != null">
+        evaluation = #{evaluation,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where userID = #{userid,jdbcType=INTEGER}
+      and goodID = #{goodid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.demo.mms.common.domain.Evaluate">
+    update evaluate
+    set stars = #{stars,jdbcType=INTEGER},
+      evaluation = #{evaluation,jdbcType=LONGVARCHAR}
+    where userID = #{userid,jdbcType=INTEGER}
+      and goodID = #{goodid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.demo.mms.common.domain.Evaluate">
+    update evaluate
+    set stars = #{stars, jdbcType=INTEGER},
+      evaluation = #{evaluation, jdbcType=LONGVARCHAR}
+    where userID = #{userid, jdbcType=INTEGER}
+      and goodID = #{goodid, jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey2" parameterType="java.util.Map">
+    update evaluate
+    set stars = #{stars, jdbcType=INTEGER},
+      evaluation = #{evaluation, jdbcType=LONGVARCHAR}
+    where userID = #{id, jdbcType=INTEGER}
+      and goodID = #{goodid, jdbcType=INTEGER}
+  </update>
+  <select id="getNumByUserId" parameterType="java.lang.Integer" resultType="Integer">
+         select count(*)
+         from  evaluate
+         where userID = #{value,jdbcType=INTEGER}
+  </select>
+  <select id="getNumByGoodId" parameterType="java.lang.Integer" resultType="Integer">
+         select count(*)
+         from  evaluate
+         where goodID = #{value,jdbcType=INTEGER}
+  </select>
+  <select id="getEvaluateItem" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from evaluate
+    where userID = #{id,jdbcType=INTEGER}
+    limit #{value},1
+  </select>
+  <select id="getEvaluateItem2" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from evaluate
+    where goodID = #{id,jdbcType=INTEGER}
+    limit #{value},1
+  </select>
+</mapper>

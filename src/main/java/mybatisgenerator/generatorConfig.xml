@@ -54,7 +54,7 @@
         <!--<table tableName="student" domainObjectName="Student" enableCountByExample="false" enableUpdateByExample="false"-->
                <!--enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>-->
 
-        <table tableName="goodlist" domainObjectName="GoodList" enableCountByExample="false" enableUpdateByExample="false"
+        <table tableName="evaluate" domainObjectName="Evaluate" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"/>
 
         <!-- 有些表的字段需要指定java类型
