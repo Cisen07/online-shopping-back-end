@@ -8,4 +8,6 @@ public interface UserService {
     void addNewUser(User newUser);
 
     User getUserByID(String s); //暂时没有用到
+
+    void updateUser(User newUser);
 }

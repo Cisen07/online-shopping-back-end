@@ -1,6 +1,7 @@
 package com.demo.mms.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.mms.common.domain.Good;
 import com.demo.mms.common.domain.Shoppingcart;
@@ -249,6 +250,44 @@ public class UserController {
         }
         return jsonObjectR;
     }
+
+    @RequestMapping("/updateInfo")
+    @ResponseBody
+    public Object updateInfo(@RequestBody JSONObject jsonObject){
+        System.out.println("test1");
+        String typeID = jsonObject.getString("typeID");
+        String typeNewPassword = jsonObject.getString("typeNewPassword");
+        String typeNewPhoneNumber = jsonObject.getString("typeNewPhoneNumber");
+        String msg;
+        Boolean success = false;
+        JSONObject jsonObjectR = new JSONObject();
+        User tempUser = userService.getUserByID(typeID);
+        System.out.println("the psw is " + typeNewPassword);
+        if (tempUser == null){
+            msg = "用户不存在";
+        } else if (typeNewPassword == null || typeNewPassword.equals("")){
+            msg = "密码不能为空";
+        } else if (typeNewPhoneNumber == null || typeNewPhoneNumber.equals("")){
+            msg = "电话号码不能为空";
+        } else {
+            User newUser = new User();
+            newUser.setUserid(Integer.valueOf(typeID));
+            newUser.setUsername(tempUser.getUsername());
+            newUser.setUserpassword(typeNewPassword);
+            newUser.setPhonenumber(typeNewPhoneNumber);
+            userService.updateUser(newUser);
+            success = true;
+            msg = "修改成功";
+        }
+        try {
+            jsonObjectR.put("success", success);
+            jsonObjectR.put("message", msg);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObjectR;
+    }
+
 }
 //获取参数可以使用bean，也就是使用Admin admin，再利用方法
 //        //也可以直接获取，这里就是，注意要用包装类，不用基本类型，比如要用Integer而不是int，这样在输入空值时不会报错

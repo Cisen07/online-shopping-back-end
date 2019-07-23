@@ -30,4 +30,10 @@ public class UserServiceImpl implements UserService {
         }
         return userMapper.selectByPrimaryKey(wantUserIDInt);
     }
+
+    @Override
+    public void updateUser(User newUser) {
+        userMapper.updateByPrimaryKey(newUser);
+    }
+
 }

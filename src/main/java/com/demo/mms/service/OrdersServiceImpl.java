@@ -79,4 +79,14 @@ public class OrdersServiceImpl implements OrdersService {
             return "订单删除成功";
         }
     }
+
+    @Override
+    public Orders getOrderById(String orderId) {
+        return ordersMapper.selectByPrimaryKey(Integer.valueOf(orderId));
+    }
+
+    @Override
+    public void update(Orders orders) {
+        ordersMapper.updateByPrimaryKey(orders);
+    }
 }

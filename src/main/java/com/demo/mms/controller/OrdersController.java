@@ -168,4 +168,17 @@ public class OrdersController {
         jsonObjectR.put("message", msg);
         return jsonObjectR;
     }
+
+    @RequestMapping("/receiveGood")
+    @ResponseBody
+    public Object receive(@RequestBody JSONObject jsonObject){
+        String orderId = jsonObject.getString("orderId");
+        Orders orders = ordersService.getOrderById(orderId);
+        orders.setState("待评价");
+        ordersService.update(orders);
+        JSONObject jsonObjectR = new JSONObject();
+        jsonObjectR.put("success",true);
+        jsonObjectR.put("message", "已确认收货");
+        return jsonObjectR;
+    }
 }

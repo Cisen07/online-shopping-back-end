@@ -16,4 +16,8 @@ public interface OrdersService {
     Orders getOrder(int i, String userId);
 
     String cancelOrder(String orderId);
+
+    Orders getOrderById(String orderId);
+
+    void update(Orders orders);
 }
