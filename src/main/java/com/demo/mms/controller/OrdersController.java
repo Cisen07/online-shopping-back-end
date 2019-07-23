@@ -3,11 +3,13 @@ package com.demo.mms.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import com.demo.mms.common.domain.Good;
 import com.demo.mms.common.domain.GoodList;
 import com.demo.mms.common.domain.Orders;
 import com.demo.mms.common.utils.IDGenerator;
 import com.demo.mms.service.AddressService;
 import com.demo.mms.service.GoodListService;
+import com.demo.mms.service.GoodsService;
 import com.demo.mms.service.OrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ public class OrdersController {
     AddressService addressService;
     @Autowired
     GoodListService goodListService;
+    @Autowired
+    GoodsService goodsService;
 
     @RequestMapping("/addOrder")
     @ResponseBody
@@ -49,7 +53,7 @@ public class OrdersController {
         }
         JSONObject jsonObjectR = new JSONObject();
         boolean whetherAddNewAddress = false;
-        if(addressService.findAddress(userId, name, address, tel) == null){
+        if (addressService.findAddress(userId, name, address, tel) == null) {
             addressService.addAddress(userId, name, address, tel);
             whetherAddNewAddress = true;
         }
@@ -61,7 +65,7 @@ public class OrdersController {
                 state, name, address, tel, orderTotal);
         try {
             jsonObjectR.put("success", true);
-            if (whetherAddNewAddress == true){
+            if (whetherAddNewAddress == true) {
                 jsonObjectR.put("message", "成功生成订单, 且自动创建新地址");
             } else {
                 jsonObjectR.put("message", "成功生成订单");
@@ -72,9 +76,9 @@ public class OrdersController {
         return jsonObjectR;
     }
 
-    @RequestMapping("/orderList")
+    @RequestMapping("/orderListNotUsed")
     @ResponseBody
-    public Object getOrder(@RequestBody JSONObject jsonObject){
+    public Object getOrder(@RequestBody JSONObject jsonObject) {
         String userId = jsonObject.getString("userId");
         ArrayList<JSONObject> resultArrayList = new ArrayList<>();
         JSONObject jsonObjectR = new JSONObject();
@@ -83,7 +87,7 @@ public class OrdersController {
             jsonObjectR.put("success", false);
             jsonObjectR.put("message", "该用户没有订单");
         }
-        for(int i = 0; i < numOfOrders; i++){
+        for (int i = 0; i < numOfOrders; i++) {
             Orders order = ordersService.getOrder(i, userId);
             JSONObject tempJObject = new JSONObject();
             tempJObject.put("orderId", order.getOrderid());
@@ -96,7 +100,54 @@ public class OrdersController {
         try {
             jsonObjectR.put("success", true);
             jsonObjectR.put("message", "查询成功");
-            jsonObjectR.put("result",resultArrayList);
+            jsonObjectR.put("result", resultArrayList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObjectR;
+    }
+
+    @RequestMapping("/orderList")
+    @ResponseBody
+    public Object getOrder2(@RequestBody JSONObject jsonObject) {    //详细信息版
+        String userId = jsonObject.getString("userId");
+        ArrayList<JSONObject> resultArrayList = new ArrayList<>();
+        JSONObject jsonObjectR = new JSONObject();
+        int numOfOrders = ordersService.getOrderNumByUserId(userId);
+        if (numOfOrders == 0) {
+            jsonObjectR.put("success", false);
+            jsonObjectR.put("message", "该用户没有订单");
+        }
+        for (int i = 0; i < numOfOrders; i++) {
+            Orders order = ordersService.getOrder(i, userId);
+            JSONObject tempJObject = new JSONObject();
+            tempJObject.put("orderId", order.getOrderid());
+            tempJObject.put("orderTotal", order.getTotalprice());
+            tempJObject.put("orderStatus", order.getState());
+            tempJObject.put("createDate", order.getOrdertime());
+
+            int num = goodListService.getNumByOrderId(order.getOrderid());
+            JSONArray jsonArray = new JSONArray();
+            for (int n = 0; i < num; i++) {
+                JSONObject tempJ = new JSONObject();
+                GoodList tempGoodList = goodListService.getTheNthItem(order.getOrderid(), i);
+                tempJ.put("goodId", tempGoodList.getGoodid());
+                tempJ.put("goodNum", tempGoodList.getGoodnum());
+                Good tempGood = goodsService.getGoodByID(tempGoodList.getGoodid().toString());
+                tempJ.put("subTitle", tempGood.getDescription());
+                tempJ.put("price", tempGood.getPrice());
+                tempJ.put("picUrl", tempGood.getPicture());
+                tempJ.put("kindId", tempGood.getKindid());
+                jsonArray.add(tempJ);
+            }
+
+            tempJObject.put("goodsList", goodListService.getGoodsListByOrderId(order.getOrderid()));
+            resultArrayList.add(tempJObject);
+        }
+        try {
+            jsonObjectR.put("success", true);
+            jsonObjectR.put("message", "查询成功");
+            jsonObjectR.put("result", resultArrayList);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -105,11 +156,11 @@ public class OrdersController {
 
     @RequestMapping("/cancelOrder")
     @ResponseBody
-    public Object Order(@RequestBody JSONObject jsonObject){
+    public Object Order(@RequestBody JSONObject jsonObject) {
         String orderId = jsonObject.getString("orderId");
         String msg = ordersService.cancelOrder(orderId);
         JSONObject jsonObjectR = new JSONObject();
-        if(msg.equals("订单不存在")){
+        if (msg.equals("订单不存在")) {
             jsonObjectR.put("success", false);
         } else {
             jsonObjectR.put("success", true);
