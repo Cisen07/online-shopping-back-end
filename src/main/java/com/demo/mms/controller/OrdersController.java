@@ -125,14 +125,14 @@ public class OrdersController {
             tempJObject.put("orderTotal", order.getTotalprice());
             tempJObject.put("orderStatus", order.getState());
             tempJObject.put("createDate", order.getOrdertime());
-
             int num = goodListService.getNumByOrderId(order.getOrderid());
             JSONArray jsonArray = new JSONArray();
-            for (int n = 0; i < num; i++) {
+            System.out.println("the num is " + num);
+            for (int n = 0; n < num; n++) {
                 JSONObject tempJ = new JSONObject();
-                GoodList tempGoodList = goodListService.getTheNthItem(order.getOrderid(), i);
+                GoodList tempGoodList = goodListService.getTheNthItem(order.getOrderid(), n);
+                tempJ.put("goodNum", tempGoodList.getGoodnum().toString());
                 tempJ.put("goodId", tempGoodList.getGoodid());
-                tempJ.put("goodNum", tempGoodList.getGoodnum());
                 Good tempGood = goodsService.getGoodByID(tempGoodList.getGoodid().toString());
                 tempJ.put("subTitle", tempGood.getDescription());
                 tempJ.put("price", tempGood.getPrice());
@@ -140,8 +140,8 @@ public class OrdersController {
                 tempJ.put("kindId", tempGood.getKindid());
                 jsonArray.add(tempJ);
             }
-
-            tempJObject.put("goodsList", goodListService.getGoodsListByOrderId(order.getOrderid()));
+//            tempJObject.put("goodsList", goodListService.getGoodsListByOrderId(order.getOrderid()));
+            tempJObject.put("goodsList", jsonArray);
             resultArrayList.add(tempJObject);
         }
         try {
