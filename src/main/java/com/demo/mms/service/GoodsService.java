@@ -13,4 +13,8 @@ public interface GoodsService {
     int getNumOfGood();
 
     Good getTheNthGood(int i);
+
+    int getNumBySearch(String name);
+
+    Good getGoodBySearch(int i, String name);
 }

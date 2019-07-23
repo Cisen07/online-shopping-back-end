@@ -173,3 +173,4 @@ PRIMARY KEY (`orderID`)
 ENGINE=INNODB
 ;
 insert into evaluate value('太好了',4,4,1);
+

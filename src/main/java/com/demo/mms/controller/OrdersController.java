@@ -169,7 +169,7 @@ public class OrdersController {
         return jsonObjectR;
     }
 
-    @RequestMapping("/receiveGood")
+    @RequestMapping("/receiveGood") //弃用
     @ResponseBody
     public Object receive(@RequestBody JSONObject jsonObject){
         String orderId = jsonObject.getString("orderId");
@@ -179,6 +179,31 @@ public class OrdersController {
         JSONObject jsonObjectR = new JSONObject();
         jsonObjectR.put("success",true);
         jsonObjectR.put("message", "已确认收货");
+        return jsonObjectR;
+    }
+
+    @RequestMapping("/updateState")
+    @ResponseBody
+    public Object changeStateOfOrder(@RequestBody JSONObject jsonObject){
+        String orderId = jsonObject.getString("orderId");
+        String request = jsonObject.getString("request");//"收货"Or""退单
+        Orders orders = ordersService.getOrderById(orderId);
+        String msg;
+        if(request.equals("收货")) {
+            orders.setState("已收货");
+            orders.setReceivetime(new Date());
+            msg = "已确认收货";
+        }else {
+            if(orders.getState().equals("待发货")){
+                orders.setState("退单中");
+                msg = "已发出退单申请";
+            }
+            else msg = "已发货，无法退单";
+        }
+        ordersService.update(orders);
+        JSONObject jsonObjectR = new JSONObject();
+        jsonObjectR.put("success",true);
+        jsonObjectR.put("message", msg);
         return jsonObjectR;
     }
 }

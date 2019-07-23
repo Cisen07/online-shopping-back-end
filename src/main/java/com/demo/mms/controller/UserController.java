@@ -87,6 +87,7 @@ public class UserController {
     @ResponseBody
     public Object getCartList(@RequestBody JSONObject jsonObject){
         String wantUserID = jsonObject.getString("userID");
+        System.out.println("the userID is: " + wantUserID);
         String[] productIDList = shoppingcartService.getAllProductIDByUserID(wantUserID);
         String[] productNumList = shoppingcartService.getAllProductNumByUserID(wantUserID);
         JSONObject jsonObjectR = new JSONObject();

@@ -48,11 +48,11 @@ public class GoodsController {
 
     @RequestMapping("/allGoods")
     @ResponseBody
-    public Object getAllGoods(@RequestBody JSONObject jsonObject){
+    public Object getAllGoods(@RequestBody JSONObject jsonObject) {
         JSONObject jsonObjectR = new JSONObject();
         ArrayList<JSONObject> resultArrayList = new ArrayList<>();
         String cid = jsonObject.getString("cid");
-        if (cid.equals("-1")){   //此时返回所有商品
+        if (cid.equals("-1")) {   //此时返回所有商品
             int numOfGoods = goodsService.getNumOfGood();
             if (numOfGoods == 0) {
                 jsonObjectR.put("success", false);
@@ -73,7 +73,7 @@ public class GoodsController {
                 jsonObjectR.put("success", true);
             }
             return jsonObjectR;
-        }else{  //这里需要针对某个类给出产品信息
+        } else {  //这里需要针对某个类给出产品信息
             int numOfGoodsByKinds = goodsService.getNumOfGood(cid);
             if (numOfGoodsByKinds == 0) {
                 jsonObjectR.put("success", false);
@@ -99,7 +99,7 @@ public class GoodsController {
 
     @RequestMapping("/productDet")
     @ResponseBody
-    public Object getProductInfoByID(@RequestBody JSONObject jsonObject){
+    public Object getProductInfoByID(@RequestBody JSONObject jsonObject) {
         JSONObject jsonObjectR = new JSONObject();
         String wantProductID = jsonObject.getString("productId");
         Good wantGood = goodsService.getGoodByID(wantProductID);
@@ -118,6 +118,33 @@ public class GoodsController {
             jsonObjectR.put("message", "成功获取该产品详细信息");
             jsonObjectR.put("result", jsonObject1);
         }
+        return jsonObjectR;
+    }
+
+    @RequestMapping("/searchGood")
+    @ResponseBody
+    public Object searchgood(@RequestBody JSONObject jsonObject) {
+        String name = jsonObject.getString("name");
+        int num = goodsService.getNumBySearch(name);
+        ArrayList<JSONObject> resultArrayList = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            System.out.println("test3");
+            Good good = goodsService.getGoodBySearch(i, name);
+            System.out.println("test4");
+            JSONObject tempjsonObject = new JSONObject();
+            tempjsonObject.put("goodID", good.getGoodid());
+            tempjsonObject.put("name", good.getGoodname());
+            tempjsonObject.put("kindID", good.getKindid());
+            tempjsonObject.put("price", good.getPrice());
+            tempjsonObject.put("description", good.getDescription());
+            tempjsonObject.put("picture", good.getPicture());
+            resultArrayList.add(tempjsonObject);
+        }
+
+        JSONObject jsonObjectR = new JSONObject();
+        jsonObjectR.put("success", true);
+        jsonObjectR.put("message", null);
+        jsonObjectR.put("result", resultArrayList);
         return jsonObjectR;
     }
 }

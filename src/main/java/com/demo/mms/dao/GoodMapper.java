@@ -25,4 +25,9 @@ public interface GoodMapper {
     Good getTheNthGoodByKindFromDB(@Param("cid")String cid, @Param("value")Integer i);
 
     Good getTheNthGoodFromDB(int i);
+
+    int getNumBySearch(@Param("name")String name);
+
+    Good getGoodBySearch(@Param("value") Integer i, @Param("name") String name);
+
 }

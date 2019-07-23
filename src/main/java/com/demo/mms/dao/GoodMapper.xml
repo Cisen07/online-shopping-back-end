@@ -139,4 +139,15 @@
     from good
     limit #{value},1
   </select>
+  <select id="getNumBySearch" parameterType="java.lang.String" resultType="Integer">
+    select count(*)
+    from good
+    where goodName like CONCAT('%',#{name,jdbcType=VARCHAR},'%')  or description like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+  </select>
+  <select id="getGoodBySearch" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select *
+    from good
+    where goodName like CONCAT('%',#{name,jdbcType=VARCHAR},'%')  or description like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+    limit #{value},1
+  </select>
 </mapper>
