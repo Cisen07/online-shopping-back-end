@@ -134,6 +134,7 @@ public class OrdersController {
                 tempJ.put("goodNum", tempGoodList.getGoodnum().toString());
                 tempJ.put("goodId", tempGoodList.getGoodid());
                 Good tempGood = goodsService.getGoodByID(tempGoodList.getGoodid().toString());
+                tempJ.put("goodName", tempGood.getGoodname());
                 tempJ.put("subTitle", tempGood.getDescription());
                 tempJ.put("price", tempGood.getPrice());
                 tempJ.put("picUrl", tempGood.getPicture());
